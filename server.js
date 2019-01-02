@@ -37,24 +37,34 @@ app.post('/messages',(req,res)=>
 {
     var message = new Message(req.body)
 
-    message.save((err) => {
-        if (err)
-            sendStatus(500)
+    message.save()
+    .then(() => {
         
-        Message.findOne({message:'badword'},(err,censored)=>{
-            if(censorede)
-            {
-                console.log('censored word found', censored)
-                Message.remove({_id:censored.id},(err)=> {
-                    console.log('removed censored message')
-                })
-            }
-        })
+        console.log('message saved')
+        return Message.findOne({message:'badword'})
         
-        
-        io.emit('message',req.body)
-        res.sendStatus(200)
     })
+    .then(censored => {
+        if(censored)
+        {
+            console.log('censored word found', censored)
+            return Message.deleteOne({_id:censored.id})
+        }
+            io.emit('message',req.body)
+            res.sendStatus(200)
+
+    })
+    
+    .catch((err)=>
+    {
+        res.sendStatus(500)
+        console.log('error found')
+    })
+
+   
+    
+    
+    
     
     
 })
