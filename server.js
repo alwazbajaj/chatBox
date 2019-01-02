@@ -6,6 +6,7 @@ var io = require('socket.io')(http)
 var mongoose = require('mongoose')
 const port = 3200
 
+mongoose.promise = Promise
 //mongoose connection
 mongoose.promise = global.promise;
 mongoose.connect('mongodb://localhost/ChatBoxdb', {
@@ -39,6 +40,16 @@ app.post('/messages',(req,res)=>
     message.save((err) => {
         if (err)
             sendStatus(500)
+        
+        Message.findOne({message:'badword'},(err,censored)=>{
+            if(censorede)
+            {
+                console.log('censored word found', censored)
+                Message.remove({_id:censored.id},(err)=> {
+                    console.log('removed censored message')
+                })
+            }
+        })
         
         
         io.emit('message',req.body)
