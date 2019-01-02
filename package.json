@@ -4,7 +4,7 @@
   "description": "char box",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
     "start": "node server.js"
   },
   "author": "akash bajaj",
@@ -13,6 +13,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "g": "^2.0.1",
+    "jasmine": "^3.3.1",
     "mongoose": "^5.4.1",
     "nodemon": "^1.18.9",
     "socket.io": "^2.2.0"
